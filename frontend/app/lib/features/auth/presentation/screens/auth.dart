@@ -21,25 +21,28 @@ class _AuthPageState extends State<AuthPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: ListView(
-            children: [
-              WelcomeText(),
-              SizedBox(height: 24),
-              AuthToggleSelector(
-                selectedAuthType: _currentAuthType,
-                onSessionChange: (newType) {
-                  _handleChange(newType);
-                },
-              ),
-              AuthForm(
-                authFormType: _currentAuthType,
-                onTypeChange: _handleChange,
-              ),
-            ],
+    
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: ListView(
+              children: [
+                SizedBox(height: 30),
+                WelcomeText(),
+                SizedBox(height: 24),
+                AuthToggleSelector(
+                  selectedAuthType: _currentAuthType,
+                  onSessionChange: (newType) {
+                    _handleChange(newType);
+                  },
+                ),
+                AuthForm(
+                  authFormType: _currentAuthType,
+                  onTypeChange: _handleChange,
+                ),
+              ],
+            ),
           ),
         ),
       ),

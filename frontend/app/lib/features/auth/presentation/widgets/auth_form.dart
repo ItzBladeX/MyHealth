@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app/features/auth/presentation/widgets/create_account_form.dart';
 import 'package:app/features/auth/presentation/widgets/login_form.dart';
 
 class AuthForm extends StatefulWidget {
@@ -23,15 +24,6 @@ class _AuthFormState extends State<AuthForm> {
       );
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text('Register'),
-        TextButton(
-          onPressed: () => widget.onTypeChange('Sign In'),
-          child: const Text('Already have an account? Sign in'),
-        ),
-      ],
-    );
+    return CreateAccount(onSignInPressed: () => widget.onTypeChange('Sign In'));
   }
 }
