@@ -1,4 +1,7 @@
+import 'package:app/providers/auth_provider.dart';
+import 'package:app/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LogIn extends StatefulWidget {
   final VoidCallback onButtonPressed;
@@ -20,10 +23,44 @@ class _LogInState extends State<LogIn> {
     super.dispose();
   }
 
+  void sendRequest() async {
+    final phoneNumber = phoneNumberController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (!AuthService.isValidPhoneNumber(phoneNumber) ||
+        !AuthService.isValidPassword(password)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Use a valid phone number: +2519xxxxxxxx or +2517xxxxxxxx, and a password longer than 4 characters.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    bool succes = await context.read<AuthProvider>().loginUser(
+      phoneNumber,
+      password,
+    );
+
+    if (!context.mounted) return;
+
+    if (!succes) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Unable to log in. Check your connection and try again.',
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, Constraints) {
+      builder: (context, constraints) {
         return SingleChildScrollView(
           child: Center(
             child: ConstrainedBox(
@@ -31,7 +68,7 @@ class _LogInState extends State<LogIn> {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 0,
-                  vertical: Constraints.maxHeight > 600 ? 48.0 : 20.0,
+                  vertical: constraints.maxHeight > 600 ? 48.0 : 20.0,
                 ),
                 child: Container(
                   padding: const EdgeInsets.all(16),
@@ -77,9 +114,7 @@ class _LogInState extends State<LogIn> {
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                           ),
-                          onPressed: () {
-                            // TODO: Call the log-in provider.
-                          },
+                          onPressed: sendRequest,
                           child: const Text(
                             'Sign in to MyHealth',
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -90,7 +125,7 @@ class _LogInState extends State<LogIn> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Don't have an account?"),
+                          const Flexible(child: Text("Don't have an account?")),
                           TextButton(
                             onPressed: widget.onButtonPressed,
                             child: const Text('Create Account'),
@@ -144,7 +179,7 @@ class _PhoneNumberFieldState extends State<_PhoneNumberField> {
           controller: widget.controller,
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.account_circle_outlined),
-            hintText: "+0908070605",
+            hintText: "e.g +251908070605 or +251706050403",
             hintStyle: const TextStyle(fontSize: 14),
             filled: true,
             border: OutlineInputBorder(

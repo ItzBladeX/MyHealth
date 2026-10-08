@@ -52,6 +52,7 @@ def register_user(s: Session, fullname: str, phonenumber: str, password: str):
         s.add(new_user)
         s.commit()
         s.refresh(new_user)
+        s.refresh(new_user)
         return {"status": True, "error_code": None, "data": new_user}
 
     except Exception as e:

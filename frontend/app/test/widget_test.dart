@@ -1,30 +1,27 @@
-// // This is a basic Flutter widget test.
-// //
-// // To perform an interaction with a widget in your test, use the WidgetTester
-// // utility in the flutter_test package. For example, you can send tap and scroll
-// // gestures. You can also use WidgetTester to find child widgets in the widget
-// // tree, read text, and verify that the values of widget properties are correct.
+import 'package:app/features/auth/presentation/widgets/login_form.dart';
+import 'package:app/providers/auth_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
+void main() {
+  testWidgets('shows a snackbar for invalid phone number or short password', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => AuthProvider(),
+        child: MaterialApp(
+          home: Scaffold(body: LogIn(onButtonPressed: () {})),
+        ),
+      ),
+    );
 
-// import 'package:app/main.dart';
+    await tester.enterText(find.byType(TextFormField).at(0), '+25112345678');
+    await tester.enterText(find.byType(TextFormField).at(1), '123');
+    await tester.tap(find.text('Sign in to MyHealth'));
+    await tester.pump();
 
-// void main() {
-//   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-//     // Build our app and trigger a frame.
-//     await tester.pumpWidget(const MyApp());
-
-//     // Verify that our counter starts at 0.
-//     expect(find.text('0'), findsOneWidget);
-//     expect(find.text('1'), findsNothing);
-
-//     // Tap the '+' icon and trigger a frame.
-//     await tester.tap(find.byIcon(Icons.add));
-//     await tester.pump();
-
-//     // Verify that our counter has incremented.
-//     expect(find.text('0'), findsNothing);
-//     expect(find.text('1'), findsOneWidget);
-//   });
-// }
+    expect(find.textContaining('Use a valid phone number'), findsOneWidget);
+  });
+}

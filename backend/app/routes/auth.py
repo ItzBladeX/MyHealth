@@ -25,7 +25,7 @@ def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     token = create_token({"sub": payload.username})
-    return {"access_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer", "user_data": user_data}
 
 
 @router.post("/create_account")
@@ -36,7 +36,7 @@ def create_account(payload: CreateAccountRequest, session: Session = Depends(get
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=new_user["error_code"] or "Unable to create account",
         )
-
+    
     token = create_token({"sub": payload.phonenumber})
-    return {"access_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer", "user_data": new_user['data']}
 

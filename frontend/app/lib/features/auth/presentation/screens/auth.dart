@@ -14,34 +14,36 @@ class _AuthPageState extends State<AuthPage> {
   String _currentAuthType = "Sign In";
   @override
   Widget build(BuildContext context) {
-    void _handleChange(String newType) {
+    void handleChange(String newType) {
       setState(() {
         _currentAuthType = newType;
       });
     }
 
     return Scaffold(
-    
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
-            child: ListView(
-              children: [
-                SizedBox(height: 30),
-                WelcomeText(),
-                SizedBox(height: 24),
-                AuthToggleSelector(
-                  selectedAuthType: _currentAuthType,
-                  onSessionChange: (newType) {
-                    _handleChange(newType);
-                  },
-                ),
-                AuthForm(
-                  authFormType: _currentAuthType,
-                  onTypeChange: _handleChange,
-                ),
-              ],
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 560, maxHeight: 800),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 30),
+                  const WelcomeText(),
+                  const SizedBox(height: 24),
+                  AuthToggleSelector(
+                    selectedAuthType: _currentAuthType,
+                    onSessionChange: (newType) {
+                      handleChange(newType);
+                    },
+                  ),
+                  AuthForm(
+                    authFormType: _currentAuthType,
+                    onTypeChange: handleChange,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

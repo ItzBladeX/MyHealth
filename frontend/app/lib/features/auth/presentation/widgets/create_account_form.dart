@@ -1,4 +1,7 @@
+import 'package:app/providers/auth_provider.dart';
+import 'package:app/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key, required this.onSignInPressed});
@@ -21,6 +24,55 @@ class _CreateAccountState extends State<CreateAccount> {
     phoneNumberController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  void sendRequest() async {
+    final String fullName = fullNameController.text.trim();
+    final String phoneNumber = phoneNumberController.text.trim();
+    final String password = passwordController.text.trim();
+
+    final String normalizedFullName = fullName.replaceAll(RegExp(r'\s+'), ' ');
+
+    if (!RegExp(r'^[A-Za-z]+ [A-Za-z]+$').hasMatch(normalizedFullName)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Full name must be in the format: <first name> <second name>',
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (!AuthService.isValidPhoneNumber(phoneNumber) ||
+        !AuthService.isValidPassword(password)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Use a valid phone number: +2519xxxxxxxx or +2517xxxxxxxx, and a password longer than 4 characters.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    final bool success = await context.read<AuthProvider>().createAccount(
+      normalizedFullName,
+      phoneNumber,
+      password,
+    );
+
+    if (!mounted) return;
+
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Unable to create account. Check your connection and try again.',
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -56,14 +108,14 @@ class _CreateAccountState extends State<CreateAccount> {
                     children: [
                       _CreateAccountTextField(
                         label: 'Full Name',
-                        hint: 'Enter your full name',
+                        hint: 'e.g John Donald',
                         icon: Icons.person_outline,
                         controller: fullNameController,
                       ),
                       const SizedBox(height: 20),
                       _CreateAccountTextField(
                         label: 'Phone Number',
-                        hint: '+0908070605',
+                        hint: 'e.g. +251908070605 or +251701020304',
                         icon: Icons.account_circle_outlined,
                         controller: phoneNumberController,
                         keyboardType: TextInputType.phone,
@@ -90,9 +142,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          onPressed: () {
-                            // TODO: Call the sign-up provider.
-                          },
+                          onPressed: sendRequest,
                           child: const Text(
                             'Create Account',
                             style: TextStyle(fontWeight: FontWeight.bold),
