@@ -55,9 +55,9 @@ class UserService {
         .filter((u) => u.phoneNumber.equals(phonenumber))
         .getSingleOrNull();
     if (user == null) throw AuthException("No Local Users Found");
-    if (!verifyPassword(password, user.hashedPassword))
+    if (!verifyPassword(password, user.hashedPassword)){
       throw AuthException("Incorrect Password");
-
+    }
     return user.userUuid;
   }
 }

@@ -14,9 +14,15 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController(text: "+251");
   final TextEditingController passwordController = TextEditingController();
   bool rememberMe = true;
+
+  // @override
+  // void initState(){
+  //   super.initState();
+  //   phoneNumberController = TextEditingController(t)
+  // }
 
   @override
   void dispose() {

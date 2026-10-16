@@ -12,7 +12,7 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController(text: "+251");
   final TextEditingController passwordController = TextEditingController();
   bool rememberMe = true;
 
@@ -44,7 +44,7 @@ class _LogInState extends State<LogIn> {
       password,
     );
 
-    if (!context.mounted) return;
+    if (!mounted) return;
 
     if (!succes) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -177,9 +177,10 @@ class _PhoneNumberFieldState extends State<_PhoneNumberField> {
         const SizedBox(height: 8),
         TextFormField(
           controller: widget.controller,
+
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.account_circle_outlined),
-            hintText: "e.g +251908070605 or +251706050403",
+            hintText: "e.g +251908070605",
             hintStyle: const TextStyle(fontSize: 14),
             filled: true,
             border: OutlineInputBorder(

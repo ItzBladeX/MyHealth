@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 
 class AuthProvider extends ChangeNotifier {
-  String? userUUID;
+  String? userUUID = "20d849e4-99a2-492b-b9d5-56f398e57734"; //TODO: Remove this, only for testing purposes
   String? _token;
   String? get token => _token;
 
