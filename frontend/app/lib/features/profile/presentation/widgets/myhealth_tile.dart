@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app/core/constants.dart';
-import 'package:app/features/profile/presentation/widgets/view_card.dart';
+import 'package:app/features/profile/presentation/widgets/view_dialog.dart';
 
 class MyHealthCard extends StatefulWidget {
   const new({super.key});

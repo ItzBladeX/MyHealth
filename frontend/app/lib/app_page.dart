@@ -52,6 +52,7 @@ class _AppPageState extends State<AppPage> {
     return Scaffold(
       body: pages[currentPage],
       bottomNavigationBar: NavigationBar(
+        height: 64,
         selectedIndex: currentPage,
         onDestinationSelected: (value) {
           setState(() {

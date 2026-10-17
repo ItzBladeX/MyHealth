@@ -17,5 +17,8 @@ abstract class ColorConstants{
   static const Color pageBackground = Color(0xFFF8F9FF);
   static const Color cardBackground = Color(0xFFFFFFFF);
   static const Color darkBlue = Color(0xFF006194);
+  static const Color lightBlue = Color(0xFFE5EEFF);
   static const Color shadowColor3 = Color(0XFFDCE9FF);
+  static const Color redBackground = Color(0xFFFFDAD6);
+  static const Color redText = Color(0xFF93000A);
 }

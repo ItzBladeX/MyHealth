@@ -7,7 +7,7 @@ AppBar profileAppBar() {
     return AppBar(
 
       titleSpacing: 20,
-      toolbarHeight: 72,
+      toolbarHeight: 64,
       actionsPadding: EdgeInsets.all(20),
       backgroundColor: ColorConstants.pageBackground,
       title: Row(
