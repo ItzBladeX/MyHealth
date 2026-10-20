@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:app/core/constants.dart';
-import 'package:app/features/profile/presentation/widgets/view_dialog.dart';
+import 'package:app/features/profile/presentation/widgets/myhealth_dialog.dart';
 
 class MyHealthCard extends StatefulWidget {
-  const new({super.key});
+  final String fullName;
+  final String phonenumber;
+  final DateTime? birthdate;
+  final String bloodType;
+  final double weight;
+  final double height;
+
+  const MyHealthCard({
+    super.key,
+    required this.fullName,
+    required this.phonenumber,
+    required this.birthdate,
+    required this.bloodType,
+    required this.weight,
+    required this.height,
+  });
 
   @override
   State<MyHealthCard> createState() => _MyHealthCardState();
@@ -70,7 +85,7 @@ class _MyHealthCardState extends State<MyHealthCard> {
                     size: 16,
                   ),
                   Text(
-                    "+251938659012",
+                    widget.phonenumber,
                     style: TextStyle(color: ColorConstants.darkBlue),
                   ),
                 ],
@@ -81,7 +96,17 @@ class _MyHealthCardState extends State<MyHealthCard> {
           const Spacer(),
 
           ElevatedButton(
-            onPressed: () => {showEditMedicalIdDialog(context)},
+            onPressed: () => {
+              showEditMedicalIdDialog(
+                context,
+                widget.fullName,
+                widget.phonenumber,
+                widget.bloodType,
+                widget.birthdate,
+                widget.weight,
+                widget.height,
+              ),
+            },
 
             style: ElevatedButton.styleFrom(
               elevation: 0,
@@ -111,6 +136,8 @@ class _MyHealthCardState extends State<MyHealthCard> {
     );
   }
 }
+
+//Dedacted
 
 // void showDigitalMedicalId(BuildContext context) {
 //   showDialog(

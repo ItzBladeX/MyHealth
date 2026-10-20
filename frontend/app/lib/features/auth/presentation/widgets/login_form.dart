@@ -1,3 +1,4 @@
+import 'package:app/core/constants.dart';
 import 'package:app/providers/auth_provider.dart';
 import 'package:app/services/auth_services.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,10 @@ class _LogInState extends State<LogIn> {
         !AuthService.isValidPassword(password)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          backgroundColor: ColorConstants.redBackground,
+          
           content: Text(
-            'Use a valid phone number: +2519xxxxxxxx or +2517xxxxxxxx, and a password longer than 4 characters.',
+            'Incorrect Phone Number or Password',style: TextStyle(color: ColorConstants.redText),
           ),
         ),
       );
@@ -177,6 +180,7 @@ class _PhoneNumberFieldState extends State<_PhoneNumberField> {
         const SizedBox(height: 8),
         TextFormField(
           controller: widget.controller,
+          keyboardType: TextInputType.phone,
 
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.account_circle_outlined),

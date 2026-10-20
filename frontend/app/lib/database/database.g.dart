@@ -345,26 +345,48 @@ class $UserDataTable extends UserData
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $UserDataTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _userUuidMeta = const VerificationMeta(
+    'userUuid',
+  );
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
+  late final GeneratedColumn<String> userUuid = GeneratedColumn<String>(
+    'user_uuid',
     aliasedName,
     false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 36,
+      maxTextLength: 36,
     ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
-  static const VerificationMeta _ageMeta = const VerificationMeta('age');
+  static const VerificationMeta _heightMeta = const VerificationMeta('height');
   @override
-  late final GeneratedColumn<int> age = GeneratedColumn<int>(
-    'age',
+  late final GeneratedColumn<double> height = GeneratedColumn<double>(
+    'height',
     aliasedName,
     true,
-    type: DriftSqlType.int,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _weightMeta = const VerificationMeta('weight');
+  @override
+  late final GeneratedColumn<double> weight = GeneratedColumn<double>(
+    'weight',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _bloodTypeMeta = const VerificationMeta(
+    'bloodType',
+  );
+  @override
+  late final GeneratedColumn<String> bloodType = GeneratedColumn<String>(
+    'blood_type',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
   static const VerificationMeta _birthdateMeta = const VerificationMeta(
@@ -378,22 +400,14 @@ class $UserDataTable extends UserData
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _userUuidMeta = const VerificationMeta(
-    'userUuid',
-  );
   @override
-  late final GeneratedColumn<String> userUuid = GeneratedColumn<String>(
-    'user_uuid',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES user (user_uuid)',
-    ),
-  );
-  @override
-  List<GeneratedColumn> get $columns => [id, age, birthdate, userUuid];
+  List<GeneratedColumn> get $columns => [
+    userUuid,
+    height,
+    weight,
+    bloodType,
+    birthdate,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -406,13 +420,30 @@ class $UserDataTable extends UserData
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('age')) {
+    if (data.containsKey('user_uuid')) {
       context.handle(
-        _ageMeta,
-        age.isAcceptableOrUnknown(data['age']!, _ageMeta),
+        _userUuidMeta,
+        userUuid.isAcceptableOrUnknown(data['user_uuid']!, _userUuidMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_userUuidMeta);
+    }
+    if (data.containsKey('height')) {
+      context.handle(
+        _heightMeta,
+        height.isAcceptableOrUnknown(data['height']!, _heightMeta),
+      );
+    }
+    if (data.containsKey('weight')) {
+      context.handle(
+        _weightMeta,
+        weight.isAcceptableOrUnknown(data['weight']!, _weightMeta),
+      );
+    }
+    if (data.containsKey('blood_type')) {
+      context.handle(
+        _bloodTypeMeta,
+        bloodType.isAcceptableOrUnknown(data['blood_type']!, _bloodTypeMeta),
       );
     }
     if (data.containsKey('birthdate')) {
@@ -421,36 +452,34 @@ class $UserDataTable extends UserData
         birthdate.isAcceptableOrUnknown(data['birthdate']!, _birthdateMeta),
       );
     }
-    if (data.containsKey('user_uuid')) {
-      context.handle(
-        _userUuidMeta,
-        userUuid.isAcceptableOrUnknown(data['user_uuid']!, _userUuidMeta),
-      );
-    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {userUuid};
   @override
   UserDataRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return UserDataRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
+      userUuid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_uuid'],
       )!,
-      age: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}age'],
+      height: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}height'],
+      ),
+      weight: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}weight'],
+      ),
+      bloodType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}blood_type'],
       ),
       birthdate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}birthdate'],
-      ),
-      userUuid: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}user_uuid'],
       ),
     );
   }
@@ -462,42 +491,52 @@ class $UserDataTable extends UserData
 }
 
 class UserDataRow extends DataClass implements Insertable<UserDataRow> {
-  final int id;
-  final int? age;
+  final String userUuid;
+  final double? height;
+  final double? weight;
+  final String? bloodType;
   final DateTime? birthdate;
-  final String? userUuid;
   const UserDataRow({
-    required this.id,
-    this.age,
+    required this.userUuid,
+    this.height,
+    this.weight,
+    this.bloodType,
     this.birthdate,
-    this.userUuid,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    if (!nullToAbsent || age != null) {
-      map['age'] = Variable<int>(age);
+    map['user_uuid'] = Variable<String>(userUuid);
+    if (!nullToAbsent || height != null) {
+      map['height'] = Variable<double>(height);
+    }
+    if (!nullToAbsent || weight != null) {
+      map['weight'] = Variable<double>(weight);
+    }
+    if (!nullToAbsent || bloodType != null) {
+      map['blood_type'] = Variable<String>(bloodType);
     }
     if (!nullToAbsent || birthdate != null) {
       map['birthdate'] = Variable<DateTime>(birthdate);
-    }
-    if (!nullToAbsent || userUuid != null) {
-      map['user_uuid'] = Variable<String>(userUuid);
     }
     return map;
   }
 
   UserDataCompanion toCompanion(bool nullToAbsent) {
     return UserDataCompanion(
-      id: Value(id),
-      age: age == null && nullToAbsent ? const Value.absent() : Value(age),
+      userUuid: Value(userUuid),
+      height: height == null && nullToAbsent
+          ? const Value.absent()
+          : Value(height),
+      weight: weight == null && nullToAbsent
+          ? const Value.absent()
+          : Value(weight),
+      bloodType: bloodType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(bloodType),
       birthdate: birthdate == null && nullToAbsent
           ? const Value.absent()
           : Value(birthdate),
-      userUuid: userUuid == null && nullToAbsent
-          ? const Value.absent()
-          : Value(userUuid),
     );
   }
 
@@ -507,125 +546,153 @@ class UserDataRow extends DataClass implements Insertable<UserDataRow> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return UserDataRow(
-      id: serializer.fromJson<int>(json['id']),
-      age: serializer.fromJson<int?>(json['age']),
+      userUuid: serializer.fromJson<String>(json['userUuid']),
+      height: serializer.fromJson<double?>(json['height']),
+      weight: serializer.fromJson<double?>(json['weight']),
+      bloodType: serializer.fromJson<String?>(json['bloodType']),
       birthdate: serializer.fromJson<DateTime?>(json['birthdate']),
-      userUuid: serializer.fromJson<String?>(json['userUuid']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'age': serializer.toJson<int?>(age),
+      'userUuid': serializer.toJson<String>(userUuid),
+      'height': serializer.toJson<double?>(height),
+      'weight': serializer.toJson<double?>(weight),
+      'bloodType': serializer.toJson<String?>(bloodType),
       'birthdate': serializer.toJson<DateTime?>(birthdate),
-      'userUuid': serializer.toJson<String?>(userUuid),
     };
   }
 
   UserDataRow copyWith({
-    int? id,
-    Value<int?> age = const Value.absent(),
+    String? userUuid,
+    Value<double?> height = const Value.absent(),
+    Value<double?> weight = const Value.absent(),
+    Value<String?> bloodType = const Value.absent(),
     Value<DateTime?> birthdate = const Value.absent(),
-    Value<String?> userUuid = const Value.absent(),
   }) => UserDataRow(
-    id: id ?? this.id,
-    age: age.present ? age.value : this.age,
+    userUuid: userUuid ?? this.userUuid,
+    height: height.present ? height.value : this.height,
+    weight: weight.present ? weight.value : this.weight,
+    bloodType: bloodType.present ? bloodType.value : this.bloodType,
     birthdate: birthdate.present ? birthdate.value : this.birthdate,
-    userUuid: userUuid.present ? userUuid.value : this.userUuid,
   );
   UserDataRow copyWithCompanion(UserDataCompanion data) {
     return UserDataRow(
-      id: data.id.present ? data.id.value : this.id,
-      age: data.age.present ? data.age.value : this.age,
-      birthdate: data.birthdate.present ? data.birthdate.value : this.birthdate,
       userUuid: data.userUuid.present ? data.userUuid.value : this.userUuid,
+      height: data.height.present ? data.height.value : this.height,
+      weight: data.weight.present ? data.weight.value : this.weight,
+      bloodType: data.bloodType.present ? data.bloodType.value : this.bloodType,
+      birthdate: data.birthdate.present ? data.birthdate.value : this.birthdate,
     );
   }
 
   @override
   String toString() {
     return (StringBuffer('UserDataRow(')
-          ..write('id: $id, ')
-          ..write('age: $age, ')
-          ..write('birthdate: $birthdate, ')
-          ..write('userUuid: $userUuid')
+          ..write('userUuid: $userUuid, ')
+          ..write('height: $height, ')
+          ..write('weight: $weight, ')
+          ..write('bloodType: $bloodType, ')
+          ..write('birthdate: $birthdate')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, age, birthdate, userUuid);
+  int get hashCode =>
+      Object.hash(userUuid, height, weight, bloodType, birthdate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is UserDataRow &&
-          other.id == this.id &&
-          other.age == this.age &&
-          other.birthdate == this.birthdate &&
-          other.userUuid == this.userUuid);
+          other.userUuid == this.userUuid &&
+          other.height == this.height &&
+          other.weight == this.weight &&
+          other.bloodType == this.bloodType &&
+          other.birthdate == this.birthdate);
 }
 
 class UserDataCompanion extends UpdateCompanion<UserDataRow> {
-  final Value<int> id;
-  final Value<int?> age;
+  final Value<String> userUuid;
+  final Value<double?> height;
+  final Value<double?> weight;
+  final Value<String?> bloodType;
   final Value<DateTime?> birthdate;
-  final Value<String?> userUuid;
+  final Value<int> rowid;
   const UserDataCompanion({
-    this.id = const Value.absent(),
-    this.age = const Value.absent(),
-    this.birthdate = const Value.absent(),
     this.userUuid = const Value.absent(),
+    this.height = const Value.absent(),
+    this.weight = const Value.absent(),
+    this.bloodType = const Value.absent(),
+    this.birthdate = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   UserDataCompanion.insert({
-    this.id = const Value.absent(),
-    this.age = const Value.absent(),
+    required String userUuid,
+    this.height = const Value.absent(),
+    this.weight = const Value.absent(),
+    this.bloodType = const Value.absent(),
     this.birthdate = const Value.absent(),
-    this.userUuid = const Value.absent(),
-  });
+    this.rowid = const Value.absent(),
+  }) : userUuid = Value(userUuid);
   static Insertable<UserDataRow> custom({
-    Expression<int>? id,
-    Expression<int>? age,
-    Expression<DateTime>? birthdate,
     Expression<String>? userUuid,
+    Expression<double>? height,
+    Expression<double>? weight,
+    Expression<String>? bloodType,
+    Expression<DateTime>? birthdate,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (age != null) 'age': age,
-      if (birthdate != null) 'birthdate': birthdate,
       if (userUuid != null) 'user_uuid': userUuid,
+      if (height != null) 'height': height,
+      if (weight != null) 'weight': weight,
+      if (bloodType != null) 'blood_type': bloodType,
+      if (birthdate != null) 'birthdate': birthdate,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   UserDataCompanion copyWith({
-    Value<int>? id,
-    Value<int?>? age,
+    Value<String>? userUuid,
+    Value<double?>? height,
+    Value<double?>? weight,
+    Value<String?>? bloodType,
     Value<DateTime?>? birthdate,
-    Value<String?>? userUuid,
+    Value<int>? rowid,
   }) {
     return UserDataCompanion(
-      id: id ?? this.id,
-      age: age ?? this.age,
-      birthdate: birthdate ?? this.birthdate,
       userUuid: userUuid ?? this.userUuid,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
+      bloodType: bloodType ?? this.bloodType,
+      birthdate: birthdate ?? this.birthdate,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
+    if (userUuid.present) {
+      map['user_uuid'] = Variable<String>(userUuid.value);
     }
-    if (age.present) {
-      map['age'] = Variable<int>(age.value);
+    if (height.present) {
+      map['height'] = Variable<double>(height.value);
+    }
+    if (weight.present) {
+      map['weight'] = Variable<double>(weight.value);
+    }
+    if (bloodType.present) {
+      map['blood_type'] = Variable<String>(bloodType.value);
     }
     if (birthdate.present) {
       map['birthdate'] = Variable<DateTime>(birthdate.value);
     }
-    if (userUuid.present) {
-      map['user_uuid'] = Variable<String>(userUuid.value);
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -633,10 +700,284 @@ class UserDataCompanion extends UpdateCompanion<UserDataRow> {
   @override
   String toString() {
     return (StringBuffer('UserDataCompanion(')
-          ..write('id: $id, ')
-          ..write('age: $age, ')
+          ..write('userUuid: $userUuid, ')
+          ..write('height: $height, ')
+          ..write('weight: $weight, ')
+          ..write('bloodType: $bloodType, ')
           ..write('birthdate: $birthdate, ')
-          ..write('userUuid: $userUuid')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $UserAllergiesTable extends UserAllergies
+    with TableInfo<$UserAllergiesTable, UserAllergiesRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserAllergiesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _userUuidMeta = const VerificationMeta(
+    'userUuid',
+  );
+  @override
+  late final GeneratedColumn<String> userUuid = GeneratedColumn<String>(
+    'user_uuid',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 36,
+      maxTextLength: 36,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _severityMeta = const VerificationMeta(
+    'severity',
+  );
+  @override
+  late final GeneratedColumn<String> severity = GeneratedColumn<String>(
+    'severity',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [userUuid, name, severity];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_allergies';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<UserAllergiesRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('user_uuid')) {
+      context.handle(
+        _userUuidMeta,
+        userUuid.isAcceptableOrUnknown(data['user_uuid']!, _userUuidMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_userUuidMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('severity')) {
+      context.handle(
+        _severityMeta,
+        severity.isAcceptableOrUnknown(data['severity']!, _severityMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_severityMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {userUuid, name};
+  @override
+  UserAllergiesRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserAllergiesRow(
+      userUuid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_uuid'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      severity: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}severity'],
+      )!,
+    );
+  }
+
+  @override
+  $UserAllergiesTable createAlias(String alias) {
+    return $UserAllergiesTable(attachedDatabase, alias);
+  }
+}
+
+class UserAllergiesRow extends DataClass
+    implements Insertable<UserAllergiesRow> {
+  final String userUuid;
+  final String name;
+  final String severity;
+  const UserAllergiesRow({
+    required this.userUuid,
+    required this.name,
+    required this.severity,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['user_uuid'] = Variable<String>(userUuid);
+    map['name'] = Variable<String>(name);
+    map['severity'] = Variable<String>(severity);
+    return map;
+  }
+
+  UserAllergiesCompanion toCompanion(bool nullToAbsent) {
+    return UserAllergiesCompanion(
+      userUuid: Value(userUuid),
+      name: Value(name),
+      severity: Value(severity),
+    );
+  }
+
+  factory UserAllergiesRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserAllergiesRow(
+      userUuid: serializer.fromJson<String>(json['userUuid']),
+      name: serializer.fromJson<String>(json['name']),
+      severity: serializer.fromJson<String>(json['severity']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'userUuid': serializer.toJson<String>(userUuid),
+      'name': serializer.toJson<String>(name),
+      'severity': serializer.toJson<String>(severity),
+    };
+  }
+
+  UserAllergiesRow copyWith({
+    String? userUuid,
+    String? name,
+    String? severity,
+  }) => UserAllergiesRow(
+    userUuid: userUuid ?? this.userUuid,
+    name: name ?? this.name,
+    severity: severity ?? this.severity,
+  );
+  UserAllergiesRow copyWithCompanion(UserAllergiesCompanion data) {
+    return UserAllergiesRow(
+      userUuid: data.userUuid.present ? data.userUuid.value : this.userUuid,
+      name: data.name.present ? data.name.value : this.name,
+      severity: data.severity.present ? data.severity.value : this.severity,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserAllergiesRow(')
+          ..write('userUuid: $userUuid, ')
+          ..write('name: $name, ')
+          ..write('severity: $severity')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(userUuid, name, severity);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserAllergiesRow &&
+          other.userUuid == this.userUuid &&
+          other.name == this.name &&
+          other.severity == this.severity);
+}
+
+class UserAllergiesCompanion extends UpdateCompanion<UserAllergiesRow> {
+  final Value<String> userUuid;
+  final Value<String> name;
+  final Value<String> severity;
+  final Value<int> rowid;
+  const UserAllergiesCompanion({
+    this.userUuid = const Value.absent(),
+    this.name = const Value.absent(),
+    this.severity = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  UserAllergiesCompanion.insert({
+    required String userUuid,
+    required String name,
+    required String severity,
+    this.rowid = const Value.absent(),
+  }) : userUuid = Value(userUuid),
+       name = Value(name),
+       severity = Value(severity);
+  static Insertable<UserAllergiesRow> custom({
+    Expression<String>? userUuid,
+    Expression<String>? name,
+    Expression<String>? severity,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (userUuid != null) 'user_uuid': userUuid,
+      if (name != null) 'name': name,
+      if (severity != null) 'severity': severity,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  UserAllergiesCompanion copyWith({
+    Value<String>? userUuid,
+    Value<String>? name,
+    Value<String>? severity,
+    Value<int>? rowid,
+  }) {
+    return UserAllergiesCompanion(
+      userUuid: userUuid ?? this.userUuid,
+      name: name ?? this.name,
+      severity: severity ?? this.severity,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (userUuid.present) {
+      map['user_uuid'] = Variable<String>(userUuid.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (severity.present) {
+      map['severity'] = Variable<String>(severity.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserAllergiesCompanion(')
+          ..write('userUuid: $userUuid, ')
+          ..write('name: $name, ')
+          ..write('severity: $severity, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -647,11 +988,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $UserTable user = $UserTable(this);
   late final $UserDataTable userData = $UserDataTable(this);
+  late final $UserAllergiesTable userAllergies = $UserAllergiesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [user, userData];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    user,
+    userData,
+    userAllergies,
+  ];
 }
 
 typedef $$UserTableCreateCompanionBuilder = UserCompanion Function({
@@ -668,28 +1014,6 @@ typedef $$UserTableUpdateCompanionBuilder = UserCompanion Function({
   Value<String?> phoneNumber,
   Value<int> rowid,
 });
-
-final class $$UserTableReferences
-    extends BaseReferences<_$AppDatabase, $UserTable, UserRow> {
-  $$UserTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$UserDataTable, List<UserDataRow>>
-  _userDataRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-    db.userData,
-    aliasName: 'user__user_uuid__user_data__user_uuid',
-  );
-
-  $$UserDataTableProcessedTableManager get userDataRefs {
-    final manager = $$UserDataTableTableManager($_db, $_db.userData).filter(
-      (f) => f.userUuid.userUuid.sqlEquals($_itemColumn<String>('user_uuid')!),
-    );
-
-    final cache = $_typedResult.readTableOrNull(_userDataRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-}
 
 class $$UserTableFilterComposer extends Composer<_$AppDatabase, $UserTable> {
   $$UserTableFilterComposer({
@@ -718,31 +1042,6 @@ class $$UserTableFilterComposer extends Composer<_$AppDatabase, $UserTable> {
     column: $table.phoneNumber,
     builder: (column) => ColumnFilters(column),
   );
-
-  Expression<bool> userDataRefs(
-    Expression<bool> Function($$UserDataTableFilterComposer f) f,
-  ) {
-    final $$UserDataTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.userUuid,
-      referencedTable: $db.userData,
-      getReferencedColumn: (t) => t.userUuid,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$UserDataTableFilterComposer(
-            $db: $db,
-            $table: $db.userData,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$UserTableOrderingComposer extends Composer<_$AppDatabase, $UserTable> {
@@ -798,31 +1097,6 @@ class $$UserTableAnnotationComposer
     column: $table.phoneNumber,
     builder: (column) => column,
   );
-
-  Expression<T> userDataRefs<T extends Object>(
-    Expression<T> Function($$UserDataTableAnnotationComposer a) f,
-  ) {
-    final $$UserDataTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.userUuid,
-      referencedTable: $db.userData,
-      getReferencedColumn: (t) => t.userUuid,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$UserDataTableAnnotationComposer(
-            $db: $db,
-            $table: $db.userData,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$UserTableTableManager
@@ -836,9 +1110,9 @@ class $$UserTableTableManager
           $$UserTableAnnotationComposer,
           $$UserTableCreateCompanionBuilder,
           $$UserTableUpdateCompanionBuilder,
-          (UserRow, $$UserTableReferences),
+          (UserRow, BaseReferences<_$AppDatabase, $UserTable, UserRow>),
           UserRow,
-          PrefetchHooks Function({bool userDataRefs})
+          PrefetchHooks Function()
         > {
   $$UserTableTableManager(_$AppDatabase db, $UserTable table)
     : super(
@@ -883,35 +1157,15 @@ class $$UserTableTableManager
               .map(
                 (e) => (
                   e.readTable<$UserTable, UserRow>(table),
-                  $$UserTableReferences(db, table, e),
+                  BaseReferences<_$AppDatabase, $UserTable, UserRow>(
+                    db,
+                    table,
+                    e,
+                  ),
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({userDataRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (userDataRefs) db.userData],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (userDataRefs)
-                    await $_getPrefetchedData<UserRow, $UserTable, UserDataRow>(
-                      currentTable: table,
-                      referencedTable: $$UserTableReferences._userDataRefsTable(
-                        db,
-                      ),
-                      managerFromTypedResult: (p0) =>
-                          $$UserTableReferences(db, table, p0).userDataRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where(
-                            (e) => e.userUuid == item.userUuid,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ),
       );
 }
@@ -926,44 +1180,26 @@ typedef $$UserTableProcessedTableManager =
       $$UserTableAnnotationComposer,
       $$UserTableCreateCompanionBuilder,
       $$UserTableUpdateCompanionBuilder,
-      (UserRow, $$UserTableReferences),
+      (UserRow, BaseReferences<_$AppDatabase, $UserTable, UserRow>),
       UserRow,
-      PrefetchHooks Function({bool userDataRefs})
+      PrefetchHooks Function()
     >;
 typedef $$UserDataTableCreateCompanionBuilder = UserDataCompanion Function({
-  Value<int> id,
-  Value<int?> age,
+  required String userUuid,
+  Value<double?> height,
+  Value<double?> weight,
+  Value<String?> bloodType,
   Value<DateTime?> birthdate,
-  Value<String?> userUuid,
+  Value<int> rowid,
 });
 typedef $$UserDataTableUpdateCompanionBuilder = UserDataCompanion Function({
-  Value<int> id,
-  Value<int?> age,
+  Value<String> userUuid,
+  Value<double?> height,
+  Value<double?> weight,
+  Value<String?> bloodType,
   Value<DateTime?> birthdate,
-  Value<String?> userUuid,
+  Value<int> rowid,
 });
-
-final class $$UserDataTableReferences
-    extends BaseReferences<_$AppDatabase, $UserDataTable, UserDataRow> {
-  $$UserDataTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static $UserTable _userUuidTable(_$AppDatabase db) =>
-      db.user.createAlias('user_data__user_uuid__user__user_uuid');
-
-  $$UserTableProcessedTableManager? get userUuid {
-    final $_column = $_itemColumn<String>('user_uuid');
-    if ($_column == null) return null;
-    final manager = $$UserTableTableManager(
-      $_db,
-      $_db.user,
-    ).filter((f) => f.userUuid.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_userUuidTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-}
 
 class $$UserDataTableFilterComposer
     extends Composer<_$AppDatabase, $UserDataTable> {
@@ -974,13 +1210,23 @@ class $$UserDataTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
+  ColumnFilters<String> get userUuid => $composableBuilder(
+    column: $table.userUuid,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get age => $composableBuilder(
-    column: $table.age,
+  ColumnFilters<double> get height => $composableBuilder(
+    column: $table.height,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get weight => $composableBuilder(
+    column: $table.weight,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get bloodType => $composableBuilder(
+    column: $table.bloodType,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -988,29 +1234,6 @@ class $$UserDataTableFilterComposer
     column: $table.birthdate,
     builder: (column) => ColumnFilters(column),
   );
-
-  $$UserTableFilterComposer get userUuid {
-    final $$UserTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.userUuid,
-      referencedTable: $db.user,
-      getReferencedColumn: (t) => t.userUuid,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$UserTableFilterComposer(
-            $db: $db,
-            $table: $db.user,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$UserDataTableOrderingComposer
@@ -1022,13 +1245,23 @@ class $$UserDataTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
+  ColumnOrderings<String> get userUuid => $composableBuilder(
+    column: $table.userUuid,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get age => $composableBuilder(
-    column: $table.age,
+  ColumnOrderings<double> get height => $composableBuilder(
+    column: $table.height,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get weight => $composableBuilder(
+    column: $table.weight,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get bloodType => $composableBuilder(
+    column: $table.bloodType,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1036,29 +1269,6 @@ class $$UserDataTableOrderingComposer
     column: $table.birthdate,
     builder: (column) => ColumnOrderings(column),
   );
-
-  $$UserTableOrderingComposer get userUuid {
-    final $$UserTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.userUuid,
-      referencedTable: $db.user,
-      getReferencedColumn: (t) => t.userUuid,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$UserTableOrderingComposer(
-            $db: $db,
-            $table: $db.user,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$UserDataTableAnnotationComposer
@@ -1070,37 +1280,20 @@ class $$UserDataTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
+  GeneratedColumn<String> get userUuid =>
+      $composableBuilder(column: $table.userUuid, builder: (column) => column);
 
-  GeneratedColumn<int> get age =>
-      $composableBuilder(column: $table.age, builder: (column) => column);
+  GeneratedColumn<double> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<double> get weight =>
+      $composableBuilder(column: $table.weight, builder: (column) => column);
+
+  GeneratedColumn<String> get bloodType =>
+      $composableBuilder(column: $table.bloodType, builder: (column) => column);
 
   GeneratedColumn<DateTime> get birthdate =>
       $composableBuilder(column: $table.birthdate, builder: (column) => column);
-
-  $$UserTableAnnotationComposer get userUuid {
-    final $$UserTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.userUuid,
-      referencedTable: $db.user,
-      getReferencedColumn: (t) => t.userUuid,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$UserTableAnnotationComposer(
-            $db: $db,
-            $table: $db.user,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$UserDataTableTableManager
@@ -1114,9 +1307,12 @@ class $$UserDataTableTableManager
           $$UserDataTableAnnotationComposer,
           $$UserDataTableCreateCompanionBuilder,
           $$UserDataTableUpdateCompanionBuilder,
-          (UserDataRow, $$UserDataTableReferences),
+          (
+            UserDataRow,
+            BaseReferences<_$AppDatabase, $UserDataTable, UserDataRow>,
+          ),
           UserDataRow,
-          PrefetchHooks Function({bool userUuid})
+          PrefetchHooks Function()
         > {
   $$UserDataTableTableManager(_$AppDatabase db, $UserDataTable table)
     : super(
@@ -1131,75 +1327,49 @@ class $$UserDataTableTableManager
               $$UserDataTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                Value<int?> age = const Value.absent(),
+                Value<String> userUuid = const Value.absent(),
+                Value<double?> height = const Value.absent(),
+                Value<double?> weight = const Value.absent(),
+                Value<String?> bloodType = const Value.absent(),
                 Value<DateTime?> birthdate = const Value.absent(),
-                Value<String?> userUuid = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => UserDataCompanion(
-                id: id,
-                age: age,
-                birthdate: birthdate,
                 userUuid: userUuid,
+                height: height,
+                weight: weight,
+                bloodType: bloodType,
+                birthdate: birthdate,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                Value<int?> age = const Value.absent(),
+                required String userUuid,
+                Value<double?> height = const Value.absent(),
+                Value<double?> weight = const Value.absent(),
+                Value<String?> bloodType = const Value.absent(),
                 Value<DateTime?> birthdate = const Value.absent(),
-                Value<String?> userUuid = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => UserDataCompanion.insert(
-                id: id,
-                age: age,
-                birthdate: birthdate,
                 userUuid: userUuid,
+                height: height,
+                weight: weight,
+                bloodType: bloodType,
+                birthdate: birthdate,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
                   e.readTable<$UserDataTable, UserDataRow>(table),
-                  $$UserDataTableReferences(db, table, e),
+                  BaseReferences<_$AppDatabase, $UserDataTable, UserDataRow>(
+                    db,
+                    table,
+                    e,
+                  ),
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({userUuid = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (userUuid) {
-                      state = state.withJoin(
-                        currentTable: table,
-                        currentColumn: table.userUuid,
-                        referencedTable: $$UserDataTableReferences
-                            ._userUuidTable(db),
-                        referencedColumn: $$UserDataTableReferences
-                            ._userUuidTable(db)
-                            .userUuid,
-                      ) as T;
-                    }
-
-                    return state;
-                  },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ),
       );
 }
@@ -1214,9 +1384,184 @@ typedef $$UserDataTableProcessedTableManager =
       $$UserDataTableAnnotationComposer,
       $$UserDataTableCreateCompanionBuilder,
       $$UserDataTableUpdateCompanionBuilder,
-      (UserDataRow, $$UserDataTableReferences),
+      (UserDataRow, BaseReferences<_$AppDatabase, $UserDataTable, UserDataRow>),
       UserDataRow,
-      PrefetchHooks Function({bool userUuid})
+      PrefetchHooks Function()
+    >;
+typedef $$UserAllergiesTableCreateCompanionBuilder =
+    UserAllergiesCompanion Function({
+      required String userUuid,
+      required String name,
+      required String severity,
+      Value<int> rowid,
+    });
+typedef $$UserAllergiesTableUpdateCompanionBuilder =
+    UserAllergiesCompanion Function({
+      Value<String> userUuid,
+      Value<String> name,
+      Value<String> severity,
+      Value<int> rowid,
+    });
+
+class $$UserAllergiesTableFilterComposer
+    extends Composer<_$AppDatabase, $UserAllergiesTable> {
+  $$UserAllergiesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get userUuid => $composableBuilder(
+    column: $table.userUuid,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get severity => $composableBuilder(
+    column: $table.severity,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$UserAllergiesTableOrderingComposer
+    extends Composer<_$AppDatabase, $UserAllergiesTable> {
+  $$UserAllergiesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get userUuid => $composableBuilder(
+    column: $table.userUuid,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get severity => $composableBuilder(
+    column: $table.severity,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$UserAllergiesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UserAllergiesTable> {
+  $$UserAllergiesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get userUuid =>
+      $composableBuilder(column: $table.userUuid, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get severity =>
+      $composableBuilder(column: $table.severity, builder: (column) => column);
+}
+
+class $$UserAllergiesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UserAllergiesTable,
+          UserAllergiesRow,
+          $$UserAllergiesTableFilterComposer,
+          $$UserAllergiesTableOrderingComposer,
+          $$UserAllergiesTableAnnotationComposer,
+          $$UserAllergiesTableCreateCompanionBuilder,
+          $$UserAllergiesTableUpdateCompanionBuilder,
+          (
+            UserAllergiesRow,
+            BaseReferences<
+              _$AppDatabase,
+              $UserAllergiesTable,
+              UserAllergiesRow
+            >,
+          ),
+          UserAllergiesRow,
+          PrefetchHooks Function()
+        > {
+  $$UserAllergiesTableTableManager(_$AppDatabase db, $UserAllergiesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$UserAllergiesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UserAllergiesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UserAllergiesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> userUuid = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> severity = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => UserAllergiesCompanion(
+                userUuid: userUuid,
+                name: name,
+                severity: severity,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String userUuid,
+                required String name,
+                required String severity,
+                Value<int> rowid = const Value.absent(),
+              }) => UserAllergiesCompanion.insert(
+                userUuid: userUuid,
+                name: name,
+                severity: severity,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$UserAllergiesTable, UserAllergiesRow>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $UserAllergiesTable,
+                    UserAllergiesRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UserAllergiesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UserAllergiesTable,
+      UserAllergiesRow,
+      $$UserAllergiesTableFilterComposer,
+      $$UserAllergiesTableOrderingComposer,
+      $$UserAllergiesTableAnnotationComposer,
+      $$UserAllergiesTableCreateCompanionBuilder,
+      $$UserAllergiesTableUpdateCompanionBuilder,
+      (
+        UserAllergiesRow,
+        BaseReferences<_$AppDatabase, $UserAllergiesTable, UserAllergiesRow>,
+      ),
+      UserAllergiesRow,
+      PrefetchHooks Function()
     >;
 
 class $AppDatabaseManager {
@@ -1225,4 +1570,6 @@ class $AppDatabaseManager {
   $$UserTableTableManager get user => $$UserTableTableManager(_db, _db.user);
   $$UserDataTableTableManager get userData =>
       $$UserDataTableTableManager(_db, _db.userData);
+  $$UserAllergiesTableTableManager get userAllergies =>
+      $$UserAllergiesTableTableManager(_db, _db.userAllergies);
 }

@@ -1,6 +1,6 @@
 import 'package:app/core/constants.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
 class AuthException implements Exception {
@@ -12,6 +12,11 @@ class AuthException implements Exception {
 }
 
 class AuthService {
+  static String generateUUID(){
+    const uuid = Uuid();
+    String v4uuid = uuid.v4();
+    return v4uuid;
+  }
   static bool isValidPhoneNumber(String phoneNumber) {
     final normalizedPhone = phoneNumber.trim();
     return RegExp(r'^\+251[97]\d{8}$').hasMatch(normalizedPhone);
@@ -23,11 +28,6 @@ class AuthService {
     String phonenumber,
     String password,
   ) async {
-    // if (!isValidPhoneNumber(phonenumber) || !isValidPassword(password)) {
-    //   throw ArgumentError(
-    //     'Use a valid phone number: +2519xxxxxxxx or +2517xxxxxxxx, and a password longer than 4 characters.',
-    //   );
-    // }
 
     final url = Uri.parse(AppConstants.login);
 
@@ -38,13 +38,13 @@ class AuthService {
 
       final Map<String, dynamic> data = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        print('Success: ${response.body}');
+        // print('Success: ${response.body}');
         return data;
       } else {
         throw AuthException("Fetch Error");
       }
     } catch (e) {
-      print('Connection error: $e');
+      // print('Connection error: $e');
       throw AuthException("$e");
     }
   }
@@ -71,13 +71,13 @@ class AuthService {
 
       final Map<String, dynamic> data = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        print('Success: ${response.body}');
+        // print('Success: ${response.body}');
         return data;
       } else {
         throw AuthException("Fetch Error");
       }
     } catch (e) {
-      print('Connection error: $e');
+      // print('Connection error: $e');
       throw AuthException("$e");
     }
   }

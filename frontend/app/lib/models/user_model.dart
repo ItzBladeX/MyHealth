@@ -18,12 +18,29 @@ class User extends Table {
 
 @DataClassName('UserDataRow')
 class UserData extends Table {
-  IntColumn get id => integer().autoIncrement()();
+  TextColumn get userUuid =>
+      text().withLength(min: 36, max: 36).named('user_uuid')();
 
-  IntColumn get age => integer().nullable()();
+  RealColumn get height => real().nullable()();
+
+  RealColumn get weight => real().nullable()();
+
+  TextColumn get bloodType => text().nullable()();
 
   DateTimeColumn get birthdate => dateTime().nullable()();
 
+  @override
+  Set<Column> get primaryKey => {userUuid};
+}
+
+@DataClassName("UserAllergiesRow")
+class UserAllergies extends Table {
   TextColumn get userUuid =>
-      text().nullable().references(User, #userUuid).named('user_uuid')();
+      text().withLength(min: 36, max: 36).named('user_uuid')();
+
+  TextColumn get name => text()();
+  TextColumn get severity => text()();
+
+  @override
+  Set<Column> get primaryKey => {userUuid, name};
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-Container userName() {
+Container userName(String name) {
+  
   return Container(
     margin: EdgeInsets.only(right: 16),
     child: Row(
@@ -9,7 +10,7 @@ Container userName() {
       children: [
         Expanded(
           child: Text(
-            "Moti Niguse",
+            name,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
         ),

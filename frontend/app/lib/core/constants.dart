@@ -21,4 +21,6 @@ abstract class ColorConstants{
   static const Color shadowColor3 = Color(0XFFDCE9FF);
   static const Color redBackground = Color(0xFFFFDAD6);
   static const Color redText = Color(0xFF93000A);
+  static const Color purpleText = Color(0xFF3C3C78);
+  static const Color purpleBackground = Color(0xFFFAE1F5);
 }
