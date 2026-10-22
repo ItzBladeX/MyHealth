@@ -1,6 +1,7 @@
 import 'package:app/database/get_db.dart';
 import 'package:drift/drift.dart';
 import "package:app/utils/cryptography.dart";
+import 'package:flutter/services.dart';
 
 final _db = getdb;
 
@@ -189,4 +190,60 @@ class UserEditService {
       // print("database Error: $e");
     }
   }
+}
+
+
+class UserUsageDataServive {
+
+  static Future<Map<String, dynamic>?> getProcessedWellbeingData() async {
+  const platform = MethodChannel('com.myhealth.app/stats');
+
+  try {
+  
+    final bool hasPermission = await platform.invokeMethod('checkPermission');
+    if (!hasPermission) return null;
+
+   
+    final List<dynamic> rawStats = await platform.invokeMethod('getUsageStats');
+    
+    double screenOnMinutes = 0.0;
+    double screenOffMinutes = 0.0;
+    List<Map<String, dynamic>> appsList = [];
+
+    for (var item in rawStats) {
+      if (item is Map) {
+        if (item['package'] == 'METRICS_SUMMARY_SYSTEM') {
+          screenOnMinutes = (item['screenOnMinutes'] ?? 0.0).toDouble();
+          screenOffMinutes = (item['screenOffMinutes'] ?? 0.0).toDouble();
+        } else {
+          double minutes = (item['minutes'] ?? 0.0).toDouble();
+          
+          // Filter out trivial app background runtimes
+          if (minutes > 0.1) {
+            String packageName = item['package'] ?? 'UNKNOWN';
+            String cleanName = packageName.split('.').last.toUpperCase();
+            
+            appsList.add({
+              'package': packageName,
+              'name': cleanName,
+              'minutes': minutes,
+            });
+          }
+        }
+      }
+    }
+
+    appsList.sort((a, b) => b['minutes'].compareTo(a['minutes']));
+
+    return {
+      'screenOnMinutes': screenOnMinutes,
+      'screenOffMinutes': screenOffMinutes,
+      'apps': appsList,
+    };
+    
+  } catch (e) {
+    return null;
+  }
+}
+
 }

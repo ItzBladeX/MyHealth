@@ -20,10 +20,13 @@ class UserProvider extends ChangeNotifier {
   Map<String, dynamic>? _userInfo;
   Map<String, dynamic>? _userData;
   Map<String, dynamic>? _userAllergies;
+  Map<String, dynamic>? _usageData;
 
   Map<String, dynamic>? get userInfo => _userInfo;
   Map<String, dynamic>? get userData => _userData;
   Map<String, dynamic>? get userAllergies => _userAllergies;
+    Map<String, dynamic>? get usageData => _usageData;
+
 
   StreamSubscription<Map<String, dynamic>?>? _userInfoSubscription;
   StreamSubscription<Map<String, dynamic>?>? _userDataSubscription;
@@ -33,8 +36,12 @@ class UserProvider extends ChangeNotifier {
     loadUserInfo();
     loadUserdata();
     loadUserAllergies();
+    loadUsageData();
   }
-
+  Future<void>loadUsageData() async {
+    _usageData = await UserUsageDataServive.getProcessedWellbeingData();
+    notifyListeners();
+  }
   Future<void> loadUserdata() async {
     _userDataSubscription?.cancel();
     _userDataSubscription = UserService.watchUserData(userUUID).listen((data) {

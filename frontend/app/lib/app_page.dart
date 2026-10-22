@@ -50,6 +50,7 @@ class _AppPageState extends State<AppPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: pages[currentPage],
       bottomNavigationBar: NavigationBar(
         height: 64,

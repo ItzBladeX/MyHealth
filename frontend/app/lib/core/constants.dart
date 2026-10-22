@@ -11,7 +11,9 @@ abstract class AppConstants {
 
 
 abstract class ColorConstants{
+
   static const Color basecolor = Color(0xFF00685F);
+  static const Color lightGreen = Color(0xFF89F5E7);
   static const Color shadowColor = Colors.white70;
   static const Color shadowColor2 = Color(0xFFE5EEFF);
   static const Color pageBackground = Color(0xFFF8F9FF);
@@ -23,4 +25,8 @@ abstract class ColorConstants{
   static const Color redText = Color(0xFF93000A);
   static const Color purpleText = Color(0xFF3C3C78);
   static const Color purpleBackground = Color(0xFFFAE1F5);
+  static const Color amazingBlue = Color(0xFFDAE2FD);
+  static const Color primaryDark = Color(0xFF0F2E23);
+  static const Color secondaryGrey = Color(0xFF6B7280);
+  static Color iconBackground = Color(0xFFE0F7F1);
 }

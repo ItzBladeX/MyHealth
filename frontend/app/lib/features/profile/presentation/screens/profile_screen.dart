@@ -5,6 +5,7 @@ import 'package:app/features/profile/presentation/widgets/allergies_card.dart';
 import 'package:app/features/profile/presentation/widgets/profile_card.dart';
 import 'package:app/features/profile/presentation/widgets/permissions_card.dart';
 import 'package:app/features/profile/presentation/widgets/logout.dart';
+import 'package:app/app_bar.dart';
 class ProfilePage extends StatefulWidget {
   const new({super.key});
 
@@ -15,7 +16,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: profileAppBar(), body: Profile());
+    return Scaffold(appBar: appBar("Profile"), body: Profile());
   }
 }
 

@@ -4,8 +4,6 @@ import 'package:app/core/constants.dart';
 import 'package:app/features/profile/presentation/widgets/allergies_edit_sheet.dart';
 import 'package:provider/provider.dart';
 
-import 'dart:collection';
-
 class AllergiesCard extends StatelessWidget {
   const AllergiesCard({super.key});
 
@@ -101,7 +99,9 @@ Widget _buildMedicalChip({
 }
 
 class ListAllergies extends StatefulWidget {
-  const new({super.key});
+  final String? specific;
+  
+  const new({super.key, this.specific});
 
   @override
   State<ListAllergies> createState() => _ListAllergiesState();
@@ -114,12 +114,27 @@ class _ListAllergiesState extends State<ListAllergies> {
     allergies = context.watch<UserProvider>().userAllergies;
 
     final order = ["severe", "chronic", "mild"];
-    sortedAllergies = (allergies ?? {}).entries.toList()
-      ..sort(((a, b) {
-        final valA = a.value.toString().toLowerCase();
-        final valB = b.value.toString().toLowerCase();
-        return order.indexOf(valA).compareTo(order.indexOf(valB));
-      }));
+    sortedAllergies =
+        (allergies ?? {}).entries.where((entry) {
+          if (widget.specific == null) return true;
+
+          final severity = entry.value.toString().toLowerCase();
+          final category = widget.specific!.toLowerCase();
+
+          if (category == 'allergies') {
+            return severity == 'severe' || severity == 'mild';
+          } else if (category == 'conditions') {
+            return severity == 'chronic' ||
+                (severity != 'severe' && severity != 'mild');
+          }
+
+          // Fallback: if widget.specific is something else, let it pass
+          return true;
+        }).toList()..sort(((a, b) {
+          final valA = a.value.toString().toLowerCase();
+          final valB = b.value.toString().toLowerCase();
+          return order.indexOf(valA).compareTo(order.indexOf(valB));
+        }));
   }
 
   @override
@@ -130,7 +145,11 @@ class _ListAllergiesState extends State<ListAllergies> {
         child: Padding(
           padding: const EdgeInsets.all(40.0),
           child: Text(
-            "No Allergies or Conditions",
+            widget.specific == null
+                ? "No Allergies or Conditions"
+                : widget.specific!.toLowerCase() == 'allergies'
+                ? "No Allergies"
+                : "No Conditions",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
@@ -145,7 +164,7 @@ class _ListAllergiesState extends State<ListAllergies> {
           final int type;
           if (severity.toLowerCase() == 'severe') {
             type = 0;
-          } else if (severity.toLowerCase() == 'mild') {
+          } else if (severity.toLowerCase() == 'mild' || (widget.specific != null && widget.specific!.toLowerCase() == 'conditions')) {
             type = 1;
           } else {
             type = 2;
