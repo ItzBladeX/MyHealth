@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
           textTheme: baseTextTheme,
           primaryTextTheme: baseTextTheme,
         ),
+        
         debugShowCheckedModeBanner: false,
         home: const Shell(),
       ),

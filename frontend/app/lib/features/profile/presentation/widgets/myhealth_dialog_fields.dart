@@ -31,6 +31,7 @@ class MyHealthDialogField extends StatelessWidget {
           _phone,
           size: 15,
           bold: false,
+          phonenumber: true
         ),
         const SizedBox(height: 14),
         Container(

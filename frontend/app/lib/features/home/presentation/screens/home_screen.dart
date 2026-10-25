@@ -33,8 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-
-        
         SizedBox(height: 20),
         HydrationTrackerCard(),
         SizedBox(height: 20),

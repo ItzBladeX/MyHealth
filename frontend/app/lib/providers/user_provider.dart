@@ -1,8 +1,8 @@
+import 'package:app/features/history/presentation/widegts/medical_history.dart';
 import 'package:app/services/user_services.dart';
 import 'package:app/providers/auth_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 
 import 'dart:async';
 
@@ -21,27 +21,69 @@ class UserProvider extends ChangeNotifier {
   Map<String, dynamic>? _userData;
   Map<String, dynamic>? _userAllergies;
   Map<String, dynamic>? _usageData;
+  Map<int, dynamic>? _medicalHistory;
 
   Map<String, dynamic>? get userInfo => _userInfo;
   Map<String, dynamic>? get userData => _userData;
   Map<String, dynamic>? get userAllergies => _userAllergies;
-    Map<String, dynamic>? get usageData => _usageData;
-
+  Map<String, dynamic>? get usageData => _usageData;
+  Map<int, dynamic>? get medicalHistory => _medicalHistory;
 
   StreamSubscription<Map<String, dynamic>?>? _userInfoSubscription;
   StreamSubscription<Map<String, dynamic>?>? _userDataSubscription;
   StreamSubscription<Map<String, dynamic>?>? _userAllergiesSubscription;
+  StreamSubscription<Map<int, dynamic>?>? _medicalHistorySubscription;
 
   UserProvider() {
     loadUserInfo();
     loadUserdata();
     loadUserAllergies();
     loadUsageData();
+    loadMedicalHistory();
   }
-  Future<void>loadUsageData() async {
+  Future<bool> deleteHospitalRecord(int id) async {
+
+    try{
+      UserMedicalHistoryService.deleteHistory(id);
+      notifyListeners();
+      return true;
+    }catch(e){
+      print(e);
+      return false;
+    }
+    
+  }
+  Future<bool> saveMedicalHistory(Map<String, dynamic> record) async {
+    try {
+      record['useruuid'] = userUUID;
+      DateTime date = record['date'];
+      record['date'] = DateTime(date.year, date.month, date.day);
+
+      UserMedicalHistoryService.saveHisory(record);
+      notifyListeners();
+      print("Successfully saved");
+      return true;
+    } catch (e) {
+      print("DB Error: $e");
+      return false;
+    }
+  }
+
+  Future<void> loadMedicalHistory() async {
+    _medicalHistorySubscription?.cancel();
+    _medicalHistorySubscription =
+        UserMedicalHistoryService.watchUserMedicalHistory(userUUID)
+            .listen((record) {
+              _medicalHistory = record;
+              notifyListeners();
+            });
+  }
+
+  Future<void> loadUsageData() async {
     _usageData = await UserUsageDataServive.getProcessedWellbeingData();
     notifyListeners();
   }
+
   Future<void> loadUserdata() async {
     _userDataSubscription?.cancel();
     _userDataSubscription = UserService.watchUserData(userUUID).listen((data) {
@@ -76,30 +118,32 @@ class UserProvider extends ChangeNotifier {
       if (userUUID == '') throw UserException("Invalid UserUUID");
       if (allergyName == "") throw UserException("allergyName cant be None");
       if (severity == "") throw UserException("severity Number Cant be None");
-      bool success = await UserEditService.saveUserAllergies(userUUID, allergyName, severity);
+      bool success = await UserEditService.saveUserAllergies(
+        userUUID,
+        allergyName,
+        severity,
+      );
 
       if (!success) throw ("Duplicate Data");
       notifyListeners();
       return true;
     } catch (e) {
-      
       print(e);
       return false;
     }
   }
 
   Future<bool> deleteUserAllergy(String userUUID, String name) async {
-    try{
+    try {
       if (userUUID == '') throw UserException("Invalid UserUUID");
       if (name == "") throw UserException("Name cant be None");
 
       UserEditService.deleteUserAllergy(userUUID, name);
       notifyListeners();
       return true;
-    }catch(e){
+    } catch (e) {
       return false;
     }
-
   }
 
   Future<bool> saveUserData(
@@ -114,7 +158,8 @@ class UserProvider extends ChangeNotifier {
     try {
       if (userUUID == '') throw UserException("Invalid UserUUID");
       if (newName == "") throw UserException("Name cant be None");
-      if (newPhonenumber == "") throw UserException("Phone Number Cant be None");
+      if (newPhonenumber == "")
+        throw UserException("Phone Number Cant be None");
       UserEditService.saveUserData(
         newName,
         newPhonenumber,

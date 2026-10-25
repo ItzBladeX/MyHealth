@@ -983,12 +983,470 @@ class UserAllergiesCompanion extends UpdateCompanion<UserAllergiesRow> {
   }
 }
 
+class $UserMedicalHistoryTable extends UserMedicalHistory
+    with TableInfo<$UserMedicalHistoryTable, UserMedicalHistoryRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserMedicalHistoryTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _userUuidMeta = const VerificationMeta(
+    'userUuid',
+  );
+  @override
+  late final GeneratedColumn<String> userUuid = GeneratedColumn<String>(
+    'user_uuid',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 36,
+      maxTextLength: 36,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _hospitalMeta = const VerificationMeta(
+    'hospital',
+  );
+  @override
+  late final GeneratedColumn<String> hospital = GeneratedColumn<String>(
+    'hospital',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _diagnosisMeta = const VerificationMeta(
+    'diagnosis',
+  );
+  @override
+  late final GeneratedColumn<String> diagnosis = GeneratedColumn<String>(
+    'diagnosis',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _prescriptionMeta = const VerificationMeta(
+    'prescription',
+  );
+  @override
+  late final GeneratedColumn<String> prescription = GeneratedColumn<String>(
+    'prescription',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    userUuid,
+    date,
+    hospital,
+    diagnosis,
+    notes,
+    prescription,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'user_medical_history';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<UserMedicalHistoryRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_uuid')) {
+      context.handle(
+        _userUuidMeta,
+        userUuid.isAcceptableOrUnknown(data['user_uuid']!, _userUuidMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_userUuidMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('hospital')) {
+      context.handle(
+        _hospitalMeta,
+        hospital.isAcceptableOrUnknown(data['hospital']!, _hospitalMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_hospitalMeta);
+    }
+    if (data.containsKey('diagnosis')) {
+      context.handle(
+        _diagnosisMeta,
+        diagnosis.isAcceptableOrUnknown(data['diagnosis']!, _diagnosisMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_diagnosisMeta);
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    if (data.containsKey('prescription')) {
+      context.handle(
+        _prescriptionMeta,
+        prescription.isAcceptableOrUnknown(
+          data['prescription']!,
+          _prescriptionMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  UserMedicalHistoryRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserMedicalHistoryRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      userUuid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_uuid'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+      hospital: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}hospital'],
+      )!,
+      diagnosis: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}diagnosis'],
+      )!,
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+      prescription: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}prescription'],
+      ),
+    );
+  }
+
+  @override
+  $UserMedicalHistoryTable createAlias(String alias) {
+    return $UserMedicalHistoryTable(attachedDatabase, alias);
+  }
+}
+
+class UserMedicalHistoryRow extends DataClass
+    implements Insertable<UserMedicalHistoryRow> {
+  final int id;
+  final String userUuid;
+  final DateTime date;
+  final String hospital;
+  final String diagnosis;
+  final String? notes;
+  final String? prescription;
+  const UserMedicalHistoryRow({
+    required this.id,
+    required this.userUuid,
+    required this.date,
+    required this.hospital,
+    required this.diagnosis,
+    this.notes,
+    this.prescription,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['user_uuid'] = Variable<String>(userUuid);
+    map['date'] = Variable<DateTime>(date);
+    map['hospital'] = Variable<String>(hospital);
+    map['diagnosis'] = Variable<String>(diagnosis);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    if (!nullToAbsent || prescription != null) {
+      map['prescription'] = Variable<String>(prescription);
+    }
+    return map;
+  }
+
+  UserMedicalHistoryCompanion toCompanion(bool nullToAbsent) {
+    return UserMedicalHistoryCompanion(
+      id: Value(id),
+      userUuid: Value(userUuid),
+      date: Value(date),
+      hospital: Value(hospital),
+      diagnosis: Value(diagnosis),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+      prescription: prescription == null && nullToAbsent
+          ? const Value.absent()
+          : Value(prescription),
+    );
+  }
+
+  factory UserMedicalHistoryRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserMedicalHistoryRow(
+      id: serializer.fromJson<int>(json['id']),
+      userUuid: serializer.fromJson<String>(json['userUuid']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      hospital: serializer.fromJson<String>(json['hospital']),
+      diagnosis: serializer.fromJson<String>(json['diagnosis']),
+      notes: serializer.fromJson<String?>(json['notes']),
+      prescription: serializer.fromJson<String?>(json['prescription']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'userUuid': serializer.toJson<String>(userUuid),
+      'date': serializer.toJson<DateTime>(date),
+      'hospital': serializer.toJson<String>(hospital),
+      'diagnosis': serializer.toJson<String>(diagnosis),
+      'notes': serializer.toJson<String?>(notes),
+      'prescription': serializer.toJson<String?>(prescription),
+    };
+  }
+
+  UserMedicalHistoryRow copyWith({
+    int? id,
+    String? userUuid,
+    DateTime? date,
+    String? hospital,
+    String? diagnosis,
+    Value<String?> notes = const Value.absent(),
+    Value<String?> prescription = const Value.absent(),
+  }) => UserMedicalHistoryRow(
+    id: id ?? this.id,
+    userUuid: userUuid ?? this.userUuid,
+    date: date ?? this.date,
+    hospital: hospital ?? this.hospital,
+    diagnosis: diagnosis ?? this.diagnosis,
+    notes: notes.present ? notes.value : this.notes,
+    prescription: prescription.present ? prescription.value : this.prescription,
+  );
+  UserMedicalHistoryRow copyWithCompanion(UserMedicalHistoryCompanion data) {
+    return UserMedicalHistoryRow(
+      id: data.id.present ? data.id.value : this.id,
+      userUuid: data.userUuid.present ? data.userUuid.value : this.userUuid,
+      date: data.date.present ? data.date.value : this.date,
+      hospital: data.hospital.present ? data.hospital.value : this.hospital,
+      diagnosis: data.diagnosis.present ? data.diagnosis.value : this.diagnosis,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      prescription: data.prescription.present
+          ? data.prescription.value
+          : this.prescription,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserMedicalHistoryRow(')
+          ..write('id: $id, ')
+          ..write('userUuid: $userUuid, ')
+          ..write('date: $date, ')
+          ..write('hospital: $hospital, ')
+          ..write('diagnosis: $diagnosis, ')
+          ..write('notes: $notes, ')
+          ..write('prescription: $prescription')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, userUuid, date, hospital, diagnosis, notes, prescription);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserMedicalHistoryRow &&
+          other.id == this.id &&
+          other.userUuid == this.userUuid &&
+          other.date == this.date &&
+          other.hospital == this.hospital &&
+          other.diagnosis == this.diagnosis &&
+          other.notes == this.notes &&
+          other.prescription == this.prescription);
+}
+
+class UserMedicalHistoryCompanion
+    extends UpdateCompanion<UserMedicalHistoryRow> {
+  final Value<int> id;
+  final Value<String> userUuid;
+  final Value<DateTime> date;
+  final Value<String> hospital;
+  final Value<String> diagnosis;
+  final Value<String?> notes;
+  final Value<String?> prescription;
+  const UserMedicalHistoryCompanion({
+    this.id = const Value.absent(),
+    this.userUuid = const Value.absent(),
+    this.date = const Value.absent(),
+    this.hospital = const Value.absent(),
+    this.diagnosis = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.prescription = const Value.absent(),
+  });
+  UserMedicalHistoryCompanion.insert({
+    this.id = const Value.absent(),
+    required String userUuid,
+    required DateTime date,
+    required String hospital,
+    required String diagnosis,
+    this.notes = const Value.absent(),
+    this.prescription = const Value.absent(),
+  }) : userUuid = Value(userUuid),
+       date = Value(date),
+       hospital = Value(hospital),
+       diagnosis = Value(diagnosis);
+  static Insertable<UserMedicalHistoryRow> custom({
+    Expression<int>? id,
+    Expression<String>? userUuid,
+    Expression<DateTime>? date,
+    Expression<String>? hospital,
+    Expression<String>? diagnosis,
+    Expression<String>? notes,
+    Expression<String>? prescription,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userUuid != null) 'user_uuid': userUuid,
+      if (date != null) 'date': date,
+      if (hospital != null) 'hospital': hospital,
+      if (diagnosis != null) 'diagnosis': diagnosis,
+      if (notes != null) 'notes': notes,
+      if (prescription != null) 'prescription': prescription,
+    });
+  }
+
+  UserMedicalHistoryCompanion copyWith({
+    Value<int>? id,
+    Value<String>? userUuid,
+    Value<DateTime>? date,
+    Value<String>? hospital,
+    Value<String>? diagnosis,
+    Value<String?>? notes,
+    Value<String?>? prescription,
+  }) {
+    return UserMedicalHistoryCompanion(
+      id: id ?? this.id,
+      userUuid: userUuid ?? this.userUuid,
+      date: date ?? this.date,
+      hospital: hospital ?? this.hospital,
+      diagnosis: diagnosis ?? this.diagnosis,
+      notes: notes ?? this.notes,
+      prescription: prescription ?? this.prescription,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userUuid.present) {
+      map['user_uuid'] = Variable<String>(userUuid.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (hospital.present) {
+      map['hospital'] = Variable<String>(hospital.value);
+    }
+    if (diagnosis.present) {
+      map['diagnosis'] = Variable<String>(diagnosis.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (prescription.present) {
+      map['prescription'] = Variable<String>(prescription.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserMedicalHistoryCompanion(')
+          ..write('id: $id, ')
+          ..write('userUuid: $userUuid, ')
+          ..write('date: $date, ')
+          ..write('hospital: $hospital, ')
+          ..write('diagnosis: $diagnosis, ')
+          ..write('notes: $notes, ')
+          ..write('prescription: $prescription')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $UserTable user = $UserTable(this);
   late final $UserDataTable userData = $UserDataTable(this);
   late final $UserAllergiesTable userAllergies = $UserAllergiesTable(this);
+  late final $UserMedicalHistoryTable userMedicalHistory =
+      $UserMedicalHistoryTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -997,6 +1455,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     user,
     userData,
     userAllergies,
+    userMedicalHistory,
   ];
 }
 
@@ -1563,6 +2022,264 @@ typedef $$UserAllergiesTableProcessedTableManager =
       UserAllergiesRow,
       PrefetchHooks Function()
     >;
+typedef $$UserMedicalHistoryTableCreateCompanionBuilder =
+    UserMedicalHistoryCompanion Function({
+      Value<int> id,
+      required String userUuid,
+      required DateTime date,
+      required String hospital,
+      required String diagnosis,
+      Value<String?> notes,
+      Value<String?> prescription,
+    });
+typedef $$UserMedicalHistoryTableUpdateCompanionBuilder =
+    UserMedicalHistoryCompanion Function({
+      Value<int> id,
+      Value<String> userUuid,
+      Value<DateTime> date,
+      Value<String> hospital,
+      Value<String> diagnosis,
+      Value<String?> notes,
+      Value<String?> prescription,
+    });
+
+class $$UserMedicalHistoryTableFilterComposer
+    extends Composer<_$AppDatabase, $UserMedicalHistoryTable> {
+  $$UserMedicalHistoryTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get userUuid => $composableBuilder(
+    column: $table.userUuid,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get hospital => $composableBuilder(
+    column: $table.hospital,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get diagnosis => $composableBuilder(
+    column: $table.diagnosis,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get prescription => $composableBuilder(
+    column: $table.prescription,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$UserMedicalHistoryTableOrderingComposer
+    extends Composer<_$AppDatabase, $UserMedicalHistoryTable> {
+  $$UserMedicalHistoryTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get userUuid => $composableBuilder(
+    column: $table.userUuid,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get hospital => $composableBuilder(
+    column: $table.hospital,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get diagnosis => $composableBuilder(
+    column: $table.diagnosis,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get prescription => $composableBuilder(
+    column: $table.prescription,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$UserMedicalHistoryTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UserMedicalHistoryTable> {
+  $$UserMedicalHistoryTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get userUuid =>
+      $composableBuilder(column: $table.userUuid, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<String> get hospital =>
+      $composableBuilder(column: $table.hospital, builder: (column) => column);
+
+  GeneratedColumn<String> get diagnosis =>
+      $composableBuilder(column: $table.diagnosis, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  GeneratedColumn<String> get prescription => $composableBuilder(
+    column: $table.prescription,
+    builder: (column) => column,
+  );
+}
+
+class $$UserMedicalHistoryTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UserMedicalHistoryTable,
+          UserMedicalHistoryRow,
+          $$UserMedicalHistoryTableFilterComposer,
+          $$UserMedicalHistoryTableOrderingComposer,
+          $$UserMedicalHistoryTableAnnotationComposer,
+          $$UserMedicalHistoryTableCreateCompanionBuilder,
+          $$UserMedicalHistoryTableUpdateCompanionBuilder,
+          (
+            UserMedicalHistoryRow,
+            BaseReferences<
+              _$AppDatabase,
+              $UserMedicalHistoryTable,
+              UserMedicalHistoryRow
+            >,
+          ),
+          UserMedicalHistoryRow,
+          PrefetchHooks Function()
+        > {
+  $$UserMedicalHistoryTableTableManager(
+    _$AppDatabase db,
+    $UserMedicalHistoryTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$UserMedicalHistoryTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UserMedicalHistoryTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UserMedicalHistoryTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> userUuid = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<String> hospital = const Value.absent(),
+                Value<String> diagnosis = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<String?> prescription = const Value.absent(),
+              }) => UserMedicalHistoryCompanion(
+                id: id,
+                userUuid: userUuid,
+                date: date,
+                hospital: hospital,
+                diagnosis: diagnosis,
+                notes: notes,
+                prescription: prescription,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String userUuid,
+                required DateTime date,
+                required String hospital,
+                required String diagnosis,
+                Value<String?> notes = const Value.absent(),
+                Value<String?> prescription = const Value.absent(),
+              }) => UserMedicalHistoryCompanion.insert(
+                id: id,
+                userUuid: userUuid,
+                date: date,
+                hospital: hospital,
+                diagnosis: diagnosis,
+                notes: notes,
+                prescription: prescription,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$UserMedicalHistoryTable, UserMedicalHistoryRow>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $UserMedicalHistoryTable,
+                    UserMedicalHistoryRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UserMedicalHistoryTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UserMedicalHistoryTable,
+      UserMedicalHistoryRow,
+      $$UserMedicalHistoryTableFilterComposer,
+      $$UserMedicalHistoryTableOrderingComposer,
+      $$UserMedicalHistoryTableAnnotationComposer,
+      $$UserMedicalHistoryTableCreateCompanionBuilder,
+      $$UserMedicalHistoryTableUpdateCompanionBuilder,
+      (
+        UserMedicalHistoryRow,
+        BaseReferences<
+          _$AppDatabase,
+          $UserMedicalHistoryTable,
+          UserMedicalHistoryRow
+        >,
+      ),
+      UserMedicalHistoryRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1572,4 +2289,6 @@ class $AppDatabaseManager {
       $$UserDataTableTableManager(_db, _db.userData);
   $$UserAllergiesTableTableManager get userAllergies =>
       $$UserAllergiesTableTableManager(_db, _db.userAllergies);
+  $$UserMedicalHistoryTableTableManager get userMedicalHistory =>
+      $$UserMedicalHistoryTableTableManager(_db, _db.userMedicalHistory);
 }

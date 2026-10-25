@@ -1,3 +1,4 @@
+import 'package:app/features/history/presentation/screens/history_screen.dart';
 import 'package:flutter/material.dart';
 import "package:app/core/constants.dart";
 import 'package:app/features/home/presentation/screens/home_screen.dart';
@@ -41,9 +42,8 @@ class _AppPageState extends State<AppPage> {
   final List<Widget> pages = [
     const HomePage(),
     const Text("appointment"),
-    const Text("History"),
     // const AppointmentPage(),
-    // const HistoryPage(),
+    const HistoryPage(),
     const ProfilePage(),
   ];
 

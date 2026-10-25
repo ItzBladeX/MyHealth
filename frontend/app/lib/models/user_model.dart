@@ -44,3 +44,15 @@ class UserAllergies extends Table {
   @override
   Set<Column> get primaryKey => {userUuid, name};
 }
+
+@DataClassName("UserMedicalHistoryRow")
+class UserMedicalHistory extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get userUuid =>
+      text().withLength(min: 36, max: 36).named('user_uuid')();
+  DateTimeColumn get date => dateTime()();
+  TextColumn get hospital => text()();
+  TextColumn get diagnosis => text()();
+  TextColumn get notes => text().nullable()();
+  TextColumn get prescription => text().nullable()();
+}

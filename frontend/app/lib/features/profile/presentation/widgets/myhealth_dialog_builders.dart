@@ -88,6 +88,7 @@ Widget buildSelectField(
 Widget buildTextField(
   String title,
   TextEditingController controller, {
+  bool phonenumber = false,
   double size = 13,
   bool bold = true,
 }) {
@@ -104,7 +105,7 @@ Widget buildTextField(
       ),
       TextFormField(
         controller: controller,
-
+       keyboardType: phonenumber ? TextInputType.phone : TextInputType.text,
         style: TextStyle(
           color: Colors.white,
           fontSize: size,

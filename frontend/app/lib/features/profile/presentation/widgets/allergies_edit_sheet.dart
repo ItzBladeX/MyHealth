@@ -42,28 +42,30 @@ class _EditAllergiesBottomSheetState extends State<EditAllergiesBottomSheet> {
         right: 20,
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(
-                color: ColorConstants.redText,
-                borderRadius: BorderRadius.circular(2),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: ColorConstants.redText,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
-          ),
-
-          AllergiesSheetHeader(),
-          const SizedBox(height: 24),
-          CurrentAllergiesEdit(),
-          const SizedBox(height: 24),
-          AddAllergies(),
-        ],
+        
+            AllergiesSheetHeader(),
+            const SizedBox(height: 24),
+            CurrentAllergiesEdit(),
+            const SizedBox(height: 24),
+            AddAllergies(),
+          ],
+        ),
       ),
     );
   }

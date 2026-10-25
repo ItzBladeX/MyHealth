@@ -103,7 +103,7 @@ class AuthProvider extends ChangeNotifier {
         "hashed_password": hashedPassword,
       };
       // Save the user on local 
-      AuthUserService.saveUser(user);
+      await AuthUserService.saveUser(user);
       //login to that user
       return await loginUser(phonenumber, password);
       // print('Create account error: $e');
