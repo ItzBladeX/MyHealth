@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
 
 class ScreenOff extends StatelessWidget {
-  const ScreenOff({super.key});
+  const ScreenOff({
+    super.key,
+    required this.minutes,
+    required this.screenOnMinutes,
+  });
+
+  final double minutes;
+  final double screenOnMinutes;
+
+  String _formatDuration(double value) {
+    final totalMinutes = value.round();
+    final hours = totalMinutes ~/ 60;
+    final remainingMinutes = totalMinutes % 60;
+    if (hours == 0) return '${remainingMinutes}m';
+    if (remainingMinutes == 0) return '${hours}h';
+    return '${hours}h ${remainingMinutes}m';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,8 +25,13 @@ class ScreenOff extends StatelessWidget {
     const colorBackground = Colors.white;
     const colorIconBg = Color(0xFFEBEBFF); // Soft blue-indigo icon frame
     const colorIcon = Color(0xFF3B3B7A); // Deep slate blue for crescent moon
-    const colorBadgeBg = Color(0xFFEBFDF5); // Muted pale green badge back
-    const colorBadgeText = Color(0xFF0D9488); // Deep teal badge text
+    final isPassive = minutes >= screenOnMinutes;
+    final colorBadgeBg = isPassive
+        ? const Color(0xFFEBFDF5)
+        : const Color(0xFFFFF4E5);
+    final colorBadgeText = isPassive
+        ? const Color(0xFF0D9488)
+        : const Color(0xFFB45309);
     const colorMainText = Color(0xFF0F172A); // Primary text charcoal slate
     const colorSubText = Color(0xFF64748B); // Soft gray for metadata text
 
@@ -20,7 +41,7 @@ class ScreenOff extends StatelessWidget {
       //  width: 180,
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorBackground,
         borderRadius: BorderRadius.circular(24.0),
         boxShadow: [
           BoxShadow(
@@ -52,7 +73,6 @@ class ScreenOff extends StatelessWidget {
                   size: 22,
                 ),
               ),
-              // "Passive" Activity State Badge
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 14.0,
@@ -62,8 +82,8 @@ class ScreenOff extends StatelessWidget {
                   color: colorBadgeBg,
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                child: const Text(
-                  'Passive',
+                child: Text(
+                  isPassive ? 'Passive' : 'Active',
                   style: TextStyle(
                     color: colorBadgeText,
                     fontSize: 14,
@@ -89,8 +109,8 @@ class ScreenOff extends StatelessWidget {
           const SizedBox(height: 6),
 
           // Primary Duration Figure
-          const Text(
-            '7h 24m',
+          Text(
+            _formatDuration(minutes),
             style: TextStyle(
               color: colorMainText,
               fontSize: 28,
@@ -102,7 +122,7 @@ class ScreenOff extends StatelessWidget {
 
           // Relative Interval Time Block
           const Text(
-            '11:15 PM – 6:39 AM',
+            'Today',
             style: TextStyle(
               color: colorSubText,
               fontSize: 15,

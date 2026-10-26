@@ -55,12 +55,35 @@ class _UsageMatricState extends State<UsageMatric> with WidgetsBindingObserver {
     if (!permission) {
       return NoPermission(platform: platform, loadUsage: loadUsage);
     }
-    return Permission();
+    final apps = usageData?['apps'] as List<dynamic>? ?? const [];
+    final myHealthMinutes = apps
+        .whereType<Map<String, dynamic>>()
+        .where((app) => app['package'] == 'com.myhealth.app')
+        .fold<double>(
+          0,
+          (total, app) => total + (app['minutes'] as num? ?? 0).toDouble(),
+        );
+
+    return Permission(
+      screenOnMinutes: (usageData?['screenOnMinutes'] as num? ?? 0).toDouble(),
+      screenOffMinutes: (usageData?['screenOffMinutes'] as num? ?? 0)
+          .toDouble(),
+      myHealthMinutes: myHealthMinutes,
+    );
   }
 }
 
 class Permission extends StatelessWidget {
-  const new({super.key});
+  const Permission({
+    super.key,
+    required this.screenOnMinutes,
+    required this.screenOffMinutes,
+    required this.myHealthMinutes,
+  });
+
+  final double screenOnMinutes;
+  final double screenOffMinutes;
+  final double myHealthMinutes;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +115,10 @@ class Permission extends StatelessWidget {
                   minWidth: minWidth,
                   maxWidth: maxItemWidth,
                 ),
-                child: const ScreenOff(),
+                child: ScreenOff(
+                  minutes: screenOffMinutes,
+                  screenOnMinutes: screenOnMinutes,
+                ),
               ),
               Container(
                 width: dynamicWidth,
@@ -100,7 +126,10 @@ class Permission extends StatelessWidget {
                   minWidth: minWidth,
                   maxWidth: maxItemWidth,
                 ),
-                child: const ScreenTime(),
+                child: ScreenTime(
+                  minutes: screenOnMinutes,
+                  myHealthMinutes: myHealthMinutes,
+                ),
               ),
             ],
           );

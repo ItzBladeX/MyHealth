@@ -56,9 +56,6 @@ class _AddAllergiesState extends State<AddAllergies> {
         });
         return;
       }
-      if (success){
-        _errorMessage = "Successfully added $allergyName";
-      }
       // Navigator.pop(context);
     } catch (e) {
       print(e);

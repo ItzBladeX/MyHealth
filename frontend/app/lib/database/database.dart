@@ -21,15 +21,14 @@ class AppDatabase extends _$AppDatabase {
     return driftDatabase(
       name: dbName,
       native: DriftNativeOptions(
-        // Use databasePath to gain complete control over the full file destination path
+      
         databasePath: () async {
-          // 1. If debugging on a desktop platform, drop it into the current working directory
+        
           if (kDebugMode && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
             final cwd = Directory.current.path; // Dynamically gets your Flutter project root folder
             return p.join(cwd, '$dbName.sqlite');
           }
           
-          // 2. Production fallback for actual physical mobile devices / release mode
           final dbFolder = await getApplicationDocumentsDirectory();
           return p.join(dbFolder.path, '$dbName.sqlite');
         },

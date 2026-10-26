@@ -28,7 +28,7 @@ class FormActionButtons extends StatelessWidget {
               onPressed: onDelete,
               icon: const Icon(Icons.close, size: 18, color: Colors.white),
               label: const Text(
-                'Delete Record',
+                'Delete',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -70,7 +70,7 @@ class FormActionButtons extends StatelessWidget {
                 onPressed: onSave,
                 icon: const Icon(Icons.check, size: 18, color: Colors.white),
                 label: const Text(
-                  'Save Record',
+                  'Save',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
