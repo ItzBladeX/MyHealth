@@ -2,6 +2,8 @@
 
 MyHealth is a comprehensive mobile patient health portal and lifestyle tracking application designed to streamline personal medical records and daily wellness monitoring into a single, intuitive interface.
 
+**Full Information on [Documentaions.md](https://github.com/ItzBladeX/MyHealth/blob/main/Documentation.md)**
+
 ## Features
 
 ### 1. Digital Health ID & Personal Profile
@@ -32,16 +34,16 @@ MyHealth is a comprehensive mobile patient health portal and lifestyle tracking 
 	
 
 
-
-
-
-## Built By (Developer)
+## Built By
 * **Name:** Moti Niguse
+* **CTC ID:** CTC-2903-26
 * **Role:** Sole Developer
 
 ## Contact
 * **Personal Email:** motiniguse6@gmail.com
 * **Work Email:** itzbladex14@gmail.com
+* **Explainer Video:** [Google Drive](https://drive.google.com/drive/folders/1HqZkyrJ43PDoMH-7i6MHsb26PQQanlsd?usp=sharing)
+* **Project Repo** [https://github.com/ItzBladeX/MyHealth](https://github.com/ItzBladeX/MyHealth)
 * **GitHub:** [https://github.com/ItzBladeX](https://github.com/ItzBladeX)
 
 * **Teleram Username:** @BladeX14

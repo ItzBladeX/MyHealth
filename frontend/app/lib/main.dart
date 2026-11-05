@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           textTheme: baseTextTheme,
           primaryTextTheme: baseTextTheme,
         ),
-        
+
         debugShowCheckedModeBanner: false,
         home: const SplashScreen(),
       ),
@@ -69,10 +69,8 @@ class _SplashScreenState extends State<SplashScreen>
         Navigator.of(context).pushReplacement(
           PageRouteBuilder<void>(
             transitionDuration: const Duration(milliseconds: 350),
-            pageBuilder: (_, animation, __) => FadeTransition(
-              opacity: animation,
-              child: const Shell(),
-            ),
+            pageBuilder: (_, animation, __) =>
+                FadeTransition(opacity: animation, child: const Shell()),
           ),
         );
       }

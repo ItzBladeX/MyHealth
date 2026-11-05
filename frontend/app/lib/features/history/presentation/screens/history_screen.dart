@@ -1,11 +1,11 @@
-import 'package:app/core/constants.dart';
+
 import 'package:app/features/history/presentation/widegts/add_record_button.dart';
-import 'package:app/features/history/presentation/widegts/download_button.dart';
+
 import 'package:app/features/history/presentation/widegts/history_header.dart';
 import 'package:app/features/history/presentation/widegts/medical_history.dart';
 import 'package:flutter/material.dart';
 import 'package:app/app_bar.dart';
-import 'package:app/features/history/presentation/widegts/search_bar.dart';
+
 
 class HistoryPage extends StatefulWidget {
   const new({super.key});

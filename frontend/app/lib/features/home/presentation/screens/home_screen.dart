@@ -1,7 +1,5 @@
 import 'package:app/features/home/presentation/widgets/hydration_tracker/hydration_tracker_card.dart';
-import 'package:app/features/home/presentation/widgets/step_tracker/step_tracker.dart';
-import 'package:app/features/home/presentation/widgets/usage_tracker/screen_of.dart';
-import 'package:app/features/home/presentation/widgets/usage_tracker/screen_time.dart';
+
 import 'package:app/features/home/presentation/widgets/usage_tracker/usage_matric.dart';
 import 'package:flutter/material.dart';
 import 'package:app/app_bar.dart';

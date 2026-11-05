@@ -1,9 +1,10 @@
 import 'dart:io';
+
 import 'package:app/models/user_model.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path/path.dart' as p;      
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 part 'database.g.dart';
@@ -21,14 +22,13 @@ class AppDatabase extends _$AppDatabase {
     return driftDatabase(
       name: dbName,
       native: DriftNativeOptions(
-      
         databasePath: () async {
-        
-          if (kDebugMode && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
-            final cwd = Directory.current.path; // Dynamically gets your Flutter project root folder
+          if (kDebugMode &&
+              (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
+            final cwd = Directory.current.path;
             return p.join(cwd, '$dbName.sqlite');
           }
-          
+
           final dbFolder = await getApplicationDocumentsDirectory();
           return p.join(dbFolder.path, '$dbName.sqlite');
         },
